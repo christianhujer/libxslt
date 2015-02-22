@@ -13,6 +13,8 @@ When installing from a distribution package like a tar.gz:
 
 expand the package
 
+run ./autogen.sh
+
 run ./configure possibly indicating the desired installation prefix: 
 
     ./configure --prefix=/usr
