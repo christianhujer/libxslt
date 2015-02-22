@@ -98,6 +98,7 @@
 			<arg choice="plain"><option>--nomkdir</option></arg>
 			<arg choice="plain"><option>--writesubtree <replaceable>PATH</replaceable></option></arg>
 			<arg choice="plain"><option>--nodtdattr</option></arg>
+			<arg choice="plain"><option>-MMD</option></arg>
 		</group>
 		<arg choice="opt"><replaceable>STYLESHEET</replaceable></arg>
 		<group choice="req">
@@ -293,6 +294,17 @@
 	<listitem>
 		<para>
 			Allow to specify the encoding for the input.
+		</para>
+	</listitem>
+		</varlistentry>
+		<varlistentry>
+	<term>
+		<option>-MMD</option>
+	</term>
+	<listitem>
+		<para>
+			Output a rule suitable for make describing the dependencies of the main source file.
+			The rule filename is the name of the output file with its suffix replaced with '.d'.
 		</para>
 	</listitem>
 		</varlistentry>

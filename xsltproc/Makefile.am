@@ -9,7 +9,7 @@ noinst_PROGRAMS=testThreads
 
 AM_CFLAGS = $(LIBGCRYPT_CFLAGS) $(LIBXML_CFLAGS)
 
-xsltproc_SOURCES = xsltproc.c
+xsltproc_SOURCES = xsltproc.c DepFile.c
 xsltproc_LDFLAGS = 
 xsltproc_DEPENDENCIES = $(DEPS)
 
@@ -35,8 +35,8 @@ $(top_builddir)/libxslt/libxslt.la:
 $(top_builddir)/libexslt/libexslt.la: $(top_builddir)/libxslt/libxslt.la
 	cd $(top_builddir)/libexslt && $(MAKE) libexslt.la
 
-xsltproc.dv: xsltproc.o
-	$(CC) $(CFLAGS) -o xsltproc xsltproc.o ../libexslt/.libs/libexslt.a ../libxslt/.libs/libxslt.a $(LIBXML_LIBS) $(EXTRA_LIBS) $(LIBGCRYPT_LIBS)
+xsltproc.dv: xsltproc.o DepFile.o
+	$(CC) $(CFLAGS) -o xsltproc $^ ../libexslt/.libs/libexslt.a ../libxslt/.libs/libxslt.a $(LIBXML_LIBS) $(EXTRA_LIBS) $(LIBGCRYPT_LIBS)
 
 tests: testThreads
 	@echo > .memdump

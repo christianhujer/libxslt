@@ -73,6 +73,8 @@
 #include <sys/timeb.h>
 #endif
 
+#include "DepFile.h"
+
 static int debug = 0;
 static int repeat = 0;
 static int timing = 0;
@@ -105,6 +107,7 @@ static int nbpaths = 0;
 static char *output = NULL;
 static int errorno = 0;
 static const char *writesubtree = NULL;
+static int dependencyFile = 0;
 
 /*
  * Entity loading control and customization.
@@ -172,6 +175,7 @@ xsltprocExternalEntityLoader(const char *URL, const char *ID,
 			 URL ? URL : "(null)",
 			 ID ? ID : "(null)");
 	    }
+	    DepFile_recordUrl(URL);
 	    return(ret);
 	}
     }
@@ -542,6 +546,7 @@ static void usage(const char *name) {
 #endif
     printf("\t--load-trace : print trace of all external entites loaded\n");
     printf("\t--profile or --norman : dump profiling informations \n");
+    printf("\t-MMD : generate a make dependency file on the fly\n");
     printf("\nProject libxslt home page: http://xmlsoft.org/XSLT/\n");
     printf("To report bugs and get help: http://xmlsoft.org/XSLT/bugs.html\n");
 }
@@ -776,6 +781,8 @@ main(int argc, char **argv)
         } else if ((!strcmp(argv[i],"-dumpextensions"))||
 			(!strcmp(argv[i],"--dumpextensions"))) {
 		dumpextensions++;
+        } else if (!strcmp(argv[i], "-MMD")) {
+                dependencyFile++;
 	} else {
             fprintf(stderr, "Unknown option %s\n", argv[i]);
             usage(argv[0]);
@@ -796,6 +803,9 @@ main(int argc, char **argv)
      */
     exsltRegisterAll();
     xsltRegisterTestModule();
+
+    if (dependencyFile)
+        DepFile_open(output);
 
     if (dumpextensions)
 	xsltDebugDumpExtensions(NULL);
@@ -929,6 +939,7 @@ done:
     xsltFreeSecurityPrefs(sec);
     xsltCleanupGlobals();
     xmlCleanupParser();
+    DepFile_close();
     xmlMemoryDump();
     return(errorno);
 }
